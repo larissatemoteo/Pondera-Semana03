@@ -1,0 +1,120 @@
+# Projeto: Semáforo offline
+
+## Parte 1: Montagem Física do Semáforo
+
+Nesta etapa, foi realizada a montagem de um semáforo utilizando uma protoboard, LEDs nas cores vermelho, amarelo e verde, resistores e um Arduino Uno. Seguem os passos para replicar a montagem, conforme o modelo da foto:
+
+1. **Conexão dos LEDs**: 
+   - Os LEDs foram organizados verticalmente em uma estrutura de MDF para facilitar a visualização e replicar a disposição de um semáforo real.
+   - O LED vermelho foi colocado no topo, seguido pelo LED amarelo e o LED verde na parte inferior.
+   
+2. **Resistores**:
+   - Cada LED foi conectado a um resistor para limitar a corrente e proteger os componentes. Esses resistores foram posicionados na protoboard em série com os LEDs.
+
+3. **Conexão dos Fios**:
+   - Os fios foram conectados entre as portas digitais do Arduino e os LEDs na protoboard.
+   - A configuração específica das portas foi a seguinte:
+     - **Porta 10**: LED vermelho
+     - **Porta 9**: LED amarelo
+     - **Porta 8**: LED verde
+
+4. **Conexões de Alimentação e GND**:
+   - A protoboard foi conectada ao GND e à alimentação do Arduino para garantir um circuito fechado e funcional.
+
+5. **Organização dos Componentes**:
+   - A disposição dos fios e resistores foi feita para garantir clareza e facilidade de visualização, facilitando o entendimento do fluxo de corrente.
+
+Essa montagem física permite que o código controle cada LED, simulando o funcionamento de um semáforo real. A estrutura de MDF utilizada trouxe maior estabilidade à disposição dos LEDs e deixou a montagem mais organizada visualmente.
+
+### Foto da Montagem
+![Foto do Semáforo Montado](link-da-foto-no-github)
+
+### Especificações dos Componentes
+# Especificações dos Componentes Utilizados
+
+| Componente      | Quantidade | Descrição                                                                 |
+|-----------------|------------|---------------------------------------------------------------------------|
+| Arduino Uno     | 1          | Microcontrolador utilizado para controlar os LEDs                         |
+| Protoboard      | 1          | Placa de ensaio para montar o circuito                                    |
+| LED Vermelho    | 1          | Indica o estado de "Parada" no semáforo                                   |
+| LED Amarelo     | 1          | Indica o estado de "Atenção" no semáforo                                  |
+| LED Verde       | 1          | Indica o estado de "Siga" no semáforo                                     |
+| Resistores (220 Ω) | 3      | Limitam a corrente para proteger cada LED                                 |
+| Fios Jumper     | Vários     | Realizam as conexões entre Arduino, protoboard e componentes              |
+| Estrutura de MDF | 1        | Suporte para posicionar os LEDs em uma configuração de semáforo           |
+
+
+## Parte 2: Programação e Lógica do Semáforo
+
+### Lógica do Funcionamento
+O código foi desenvolvido para simular o comportamento do semáforo conforme a sequência de tempos indicada:
+- **Vermelho:** 6 segundos
+- **Amarelo:** 2 segundos
+- **Verde:** 2 segundos (com 2 segundos extras para pedestres)
+- **Amarelo:** 2 segundos
+
+### Código
+Aqui está o código utilizado para controlar o semáforo:
+
+```c
+// Definindo as portas do Arduino para cada cor do semáforo
+int vermelho = 10; // Porta digital para o LED vermelho
+int amarelo = 9;   // Porta digital para o LED amarelo
+int verde = 8;     // Porta digital para o LED verde
+
+void setup() {
+  // Configurando as portas dos LEDs como saídas
+  pinMode(vermelho, OUTPUT);
+  pinMode(amarelo, OUTPUT);
+  pinMode(verde, OUTPUT);
+}
+
+void loop() {
+  // Fase 1: LED amarelo aceso, simulando o aviso de transição
+  digitalWrite(vermelho, LOW);  // LED vermelho apagado
+  digitalWrite(amarelo, HIGH);  // LED amarelo aceso
+  digitalWrite(verde, LOW);     // LED verde apagado
+  
+  // Espera de 2 segundos para o sinal amarelo (indica mudança de estado)
+  delay(2000);
+
+  // Fase 2: LED vermelho aceso, indicando parada para os veículos
+  digitalWrite(amarelo, LOW);   // LED amarelo apagado
+  digitalWrite(vermelho, HIGH); // LED vermelho aceso
+  
+  // Espera de 6 segundos para o sinal vermelho (parada total)
+  delay(6000);
+
+  // Fase 3: LED verde aceso, sinal liberado para os veículos
+  digitalWrite(verde, HIGH);    // LED verde aceso
+  digitalWrite(vermelho, LOW);  // LED vermelho apagado
+  
+  // Espera de 4 segundos para o sinal verde (permite travessia completa)
+  delay(2000); // primeiros 2 segundos
+  delay(2000); // mais 2 segundos adicionais para pedestres
+}
+
+```
+## Parte 3: Avaliação de Pares
+
+### Avaliador: Fernando Soares Oliveira
+
+| Critério                                                                                                 | Contempla (Pontos) | Contempla Parcialmente (Pontos) | Não Contempla (Pontos) | Observações do Avaliador                                                                                   |
+|---------------------------------------------------------------------------------------------------------|--------------------|----------------------------------|--------------------------|-----------------------------------------------------------------------------------------------------------|
+| Montagem física com cores corretas, boa disposição dos fios e uso adequado de resistores                | 3                  |                                  |                          | Montagem física bem organizada e com boa clareza visual.                                                  |
+| Temporização adequada conforme tempos medidos com auxílio de algum instrumento externo                  | 3                  |                                  |                          | Temporização testada e corresponde ao ciclo do semáforo.                                                  |
+| Código implementa corretamente as fases do semáforo e estrutura do código (variáveis representativas e comentários) | 3                  |                                  |                          | Código bem estruturado e com comentários que descrevem o passo a passo.                                                                 |
+| Extra: Implementou um componente de liga/desliga no semáforo e/ou usou ponteiros no código             | 1                  |                                  |                          | Extra contemplado com o uso das placas de MDF, proporcionando uma montagem estável e organizada. |
+| **Pontuação Total**                                                                                     | **10**             |                                  |                          |                                                                                                           |
+
+---
+
+### Avaliador: Murilo Couto Oliveira
+
+| Critério                                                                                                 | Contempla (Pontos) | Contempla Parcialmente (Pontos) | Não Contempla (Pontos) | Observações do Avaliador                                                                                   |
+|---------------------------------------------------------------------------------------------------------|--------------------|----------------------------------|--------------------------|-----------------------------------------------------------------------------------------------------------|
+| Montagem física com cores corretas, boa disposição dos fios e uso adequado de resistores                | 3                  |                                  |                          | A montagem foi feita com organização.                                                           |
+| Temporização adequada conforme tempos medidos com auxílio de algum instrumento externo                  | 3                  |                                  |                          | O tempo de cada cor segue os intervalos definidos.                                                 |
+| Código implementa corretamente as fases do semáforo e estrutura do código (variáveis representativas e comentários) | 3                  |                                  |                          | Estrutura do código facilita a compreensão do funcionamento do semáforo.                                   |
+| Extra: Implementou um componente de liga/desliga no semáforo e/ou usou ponteiros no código             | 1                  |                                  |                          | Adição das placas de MDF trouxe uma montagem prática e uma melhor visualização.                                      |
+| **Pontuação Total**                                                                                     | **10**             |                                  |                          |                                                                                                           |
